@@ -84,7 +84,7 @@ const hey = function () {
   return comeon;
 };
 
-document.body.addEventListener('click', hey);
+// document.body.addEventListener('click', hey);
 
 //JAVASCRIPT CLOSURE
 
@@ -114,7 +114,121 @@ const ugandaAirlines = {
     console.log(
       `${passengerName} booked a seat on ${this.airline} flight ${this.code}${flightNum}`
     );
+    this.booking.push({ flight: `${this.code}${flightNum}`, passengerName });
   },
 };
 
 ugandaAirlines.book('244', 'Kyambadde Arthur');
+ugandaAirlines.book(254, 'Sssejemba danieil');
+console.log(ugandaAirlines);
+
+const rwandaAirline = {
+  airline: 'Rwanda airline',
+  code: 'RW',
+  booking: [],
+};
+
+//store book function in uganda airline into a variable
+
+const bookFunction = ugandaAirlines.book;
+
+// bookFunction(45, 'Ssonko jimmy');
+
+//call method
+//apply method
+//bind method
+
+bookFunction.call(rwandaAirline, 57, 'Ssonk jimmy');
+
+bookFunction.call(ugandaAirlines, 257, 'ssembatya dennis');
+
+const kenyaAirline = {
+  airline: 'Kenya airline',
+  code: 'KY',
+  booking: [],
+};
+
+bookFunction.call(kenyaAirline, 465, 'sejengo jordan');
+
+//if passenger information was in an array
+
+const newpassenger = [562, 'jimmy banks'];
+
+bookFunction.call(rwandaAirline, ...newpassenger);
+bookFunction.call(kenyaAirline, ...[562, 'jimmy banks']);
+
+//bind method
+
+const bookRwanda = bookFunction.bind(rwandaAirline);
+// console.log(bookRwanda);
+
+//partial application
+bookRwanda(78, 'lubuulwa steven');
+
+const bookKen678 = bookFunction.bind(kenyaAirline, 678);
+
+bookKen678('amako fadhil');
+
+//with event listeners
+
+ugandaAirlines.planes = 100;
+ugandaAirlines.buyPlane = function () {
+  console.log(this);
+
+  this.planes++;
+  console.log(this.planes);
+};
+
+//bug
+document
+  .querySelector('.buy')
+  .addEventListener('click', ugandaAirlines.buyPlane.bind(ugandaAirlines));
+//bug
+
+//CODING CHALLENGE
+
+//BONUS TEST DATA 1: [5, 2, 3]
+//BONUS TEST DATA 2: [1,5,3,9,6,1]
+
+const poll = {
+  question: 'What is your favourite programming Language',
+  options: ['0: Javascript', '1: Python', '2: Rust', '3: c++'],
+
+  answers: new Array(4).fill(0),
+
+  registerNewAnswer() {
+    //get answer variable
+    const answer = Number(
+      prompt(
+        `${this.question}\n ${this.options.join('\n')} \n('Write option number)`
+      )
+    );
+    console.log(answer);
+    //register answer
+
+    typeof answer === 'number' &&
+      answer < this.answers.length &&
+      this.answers[answer]++;
+
+    // console.log(this.answers);
+    this.displayResults('string');
+  },
+
+  displayResults(type = 'array') {
+    if (type === 'array') {
+      console.log(`${this.answers}`);
+    } else if (type === 'string') {
+      console.log(`Poll results are ${this.answers.join(', ')} `);
+    }
+  },
+};
+// poll.registerNewAnswer();
+
+document
+  .querySelector('.poll')
+  .addEventListener('click', poll.registerNewAnswer.bind(poll));
+
+poll.displayResults.call({ answers: [5, 2, 3] }, 'string');
+poll.displayResults.call({ answers: [1, 5, 3, 9, 6, 1] }, 'string');
+poll.displayResults.call({ answers: [1, 5, 3, 9, 6, 1] }, 'array');
+poll.displayResults.call({ answers: [1, 5, 3, 9, 6, 1] });
